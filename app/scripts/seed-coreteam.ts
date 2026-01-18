@@ -49,12 +49,25 @@ async function seed() {
     const gender = inferGender(member.thumbnail);
 
     // If female and no upload provided, use default female avatar
-    const thumbnailPath =
-      member.thumbnail && member.thumbnail.trim().length > 0
-        ? `/images/team/${member.thumbnail}`
-        : gender === "female"
-          ? "/images/defaults/female-avatar.jpg"
-          : "/images/defaults/male-avatar.jpg";
+    // const thumbnailPath =
+    //   member.thumbnail && member.thumbnail.trim().length > 0
+    //     ? `/images/team/${member.thumbnail}`
+    //     : gender === "female"
+    //       ? "/images/defaults/female-avatar.jpg"
+    //       : "/images/defaults/male-avatar.jpg";
+
+    let thumbnailPath = "";
+    if (gender === "female") {
+      thumbnailPath = "https://cavrac2fayzzho5v.public.blob.vercel-storage.com/team/1768686255699-apel-women-N4TrfINpuymlgX4zqWH2hZz8QHSlSz.jpg"
+    } else {
+      if (member.thumbnail && member.thumbnail.trim().length > 0) {
+        thumbnailPath = `/images/team/${member.thumbnail}`
+      } else {
+
+        thumbnailPath = "/images/defaults/male-avatar.jpg";
+
+      }
+    }
 
     const status = group === "graduates" ? "graduated" : "active";
 

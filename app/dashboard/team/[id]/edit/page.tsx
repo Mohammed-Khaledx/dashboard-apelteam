@@ -17,7 +17,7 @@ export default async function EditMemberPage(props: { params: { id: string } }) 
     <div className="p-6 max-w-xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Edit {member.name}</h1>
 
-      <TeamForm action={updateMemberWithId} mode="edit" initialData={member} />
+      <TeamForm action={updateMemberWithId} mode="edit" initialData={member}  />
     </div>
   );
 }

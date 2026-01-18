@@ -3,6 +3,7 @@
 import { useActionState, useState } from 'react';
 import Link from 'next/link';
 import ThumbnailUpload from './ThumbnailUpload';
+import Image from 'next/image';
 
 // Move local constants here so they are reusable
 const MEMBER_GROUPS = [
@@ -117,19 +118,19 @@ export default function TeamForm({ action, initialData, mode = 'create' }: TeamF
       <div className="mb-3">
         <label className="block font-medium">Thumbnail</label>
         <input name="thumbnail" type="hidden" value={thumbnailUrl} />
-
-        <ThumbnailUpload value={thumbnailUrl} onChange={setThumbnailUrl} />
-
-        <div className="mt-2">
-          <label className="block text-sm text-gray-700">Or paste an image URL</label>
-          <input
-            type="text"
-            value={thumbnailUrl}
-            onChange={(e) => setThumbnailUrl(e.target.value)}
-            className="border p-2 w-full"
-            placeholder="https://..."
+        {initialData?.gender === "female" ? (
+          <Image
+            src="https://cavrac2fayzzho5v.public.blob.vercel-storage.com/team/1768686255699-apel-women-N4TrfINpuymlgX4zqWH2hZz8QHSlSz.jpg"
+            alt="Thumbnail preview"
+            width={64}
+            height={64}
+            className="h-16 w-16 rounded object-cover border"
           />
-        </div>
+        ) : (
+          <ThumbnailUpload value={thumbnailUrl} onChange={setThumbnailUrl} />
+        )}
+
+
       </div>
 
       {/* Order */}
@@ -152,7 +153,7 @@ export default function TeamForm({ action, initialData, mode = 'create' }: TeamF
         >
           {isPending ? (mode === 'create' ? "Adding..." : "Saving...") : (mode === 'create' ? "Add Member" : "Save Changes")}
         </button>
-        
+
         <Link href="/dashboard/team" className="text-sm text-blue-600 hover:underline">
           Cancel
         </Link>
@@ -164,8 +165,8 @@ export default function TeamForm({ action, initialData, mode = 'create' }: TeamF
       )}
       {state?.success && !isPending && (
         <p className="text-green-600 mt-2">
-          {mode === 'create' 
-            ? "Member added successfully!" 
+          {mode === 'create'
+            ? "Member added successfully!"
             : "Member updated successfully!"}
         </p>
       )}
