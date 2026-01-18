@@ -1,4 +1,5 @@
 {
     "typescript.tsserver.maxTsServerMemory": 4096,
-    "typescript.tsdk": "node_modules/typescript/lib"
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "search.useIgnoreFiles": true
 }

@@ -23,6 +23,18 @@ export default function ThumbnailUpload({ value, onChange }: Props) {
             return;
         }
 
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            setError('File must be an image (JPEG, PNG, WEBP, etc).');
+            return;
+        }
+
+        // Optional: Validate file size (e.g. < 4MB)
+        if (file.size > 4 * 1024 * 1024) {
+             setError('File size must be less than 4MB.');
+             return;
+        }
+
         const formData = new FormData();
         formData.set('file', file);
 

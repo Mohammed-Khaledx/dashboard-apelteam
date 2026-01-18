@@ -12,7 +12,7 @@ export type Gender = "male" | "female";
 export interface MemberDTO {
     name: string;
     role: string;
-    thumbnail: string;
+    thumbnail: string | null;
     group: MemberGroup;
     order: number;
     gender: Gender;

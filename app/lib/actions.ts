@@ -158,8 +158,7 @@ export async function actionUpdateMember(
   redirect("/dashboard/team");
 }
 
-
-// Upload a file to Vercel Blob and return its URL
+// Vercel Blob usage
 export async function actionUploadThumbnail(
   _prevState: UploadState,
   formData: FormData
@@ -168,6 +167,16 @@ export async function actionUploadThumbnail(
     const file = formData.get("file");
     if (!file || !(file instanceof File)) {
       return { error: { message: "No file provided" } };
+    }
+
+    // Validate type on server
+    if (!file.type.startsWith("image/")) {
+      return { error: { message: "Only image files are allowed." } };
+    }
+
+    // Validate size on server (e.g. 4MB)
+    if (file.size > 4 * 1024 * 1024) {
+      return { error: { message: "File size must be less than 4MB." } };
     }
 
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");

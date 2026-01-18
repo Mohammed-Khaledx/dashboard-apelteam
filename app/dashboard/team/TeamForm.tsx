@@ -39,7 +39,7 @@ interface TeamFormProps {
 export default function TeamForm({ action, initialData, mode = 'create' }: TeamFormProps) {
   const [state, formAction, isPending] = useActionState(action, null);
   const [thumbnailUrl, setThumbnailUrl] = useState(initialData?.thumbnail ?? '');
-
+  const [choice, setChoice] = useState('');
   return (
     <form action={formAction}>
       {/* Name */}
@@ -89,6 +89,7 @@ export default function TeamForm({ action, initialData, mode = 'create' }: TeamF
           name="gender"
           required
           className="border p-2 w-full"
+          onChange={(e) => setChoice(e.target.value)}
           defaultValue={initialData?.gender || ""}
         >
           <option value="" disabled>Select gender</option>
@@ -118,7 +119,7 @@ export default function TeamForm({ action, initialData, mode = 'create' }: TeamF
       <div className="mb-3">
         <label className="block font-medium">Thumbnail</label>
         <input name="thumbnail" type="hidden" value={thumbnailUrl} />
-        {initialData?.gender === "female" ? (
+        {initialData?.gender === "female" || choice === "female"? (
           <Image
             src="https://cavrac2fayzzho5v.public.blob.vercel-storage.com/team/1768686255699-apel-women-N4TrfINpuymlgX4zqWH2hZz8QHSlSz.jpg"
             alt="Thumbnail preview"
