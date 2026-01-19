@@ -1,4 +1,9 @@
+import { redirect } from "next/navigation";
+
 export default function DashboardPage() {
+
+  redirect('/dashboard/team')
+
   return (
     <div className="space-y-8">
       <div>
