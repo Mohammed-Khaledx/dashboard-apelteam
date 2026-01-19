@@ -1,52 +1,73 @@
-"use client"
-import { redirect } from 'next/navigation';
+"use client";
 
-import { login } from '../lib/actions';
-import { useActionState, useState } from 'react';
+import Image from "next/image";
+import { redirect } from "next/navigation";
+import { useActionState, useState } from "react";
+
+import { login } from "../lib/actions";
 
 export default function LoginPage() {
-  //this work better than redirect/next in client components 
-  // specially with enents like "onClick"
-  // const router = useRouter();
-
-  // gonna to implement this later to preserve the state after error 
-  const [email, setEmail] = useState('');
   const [state, action] = useActionState(login, null);
+  const [email, setEmail] = useState("");
 
   if (state?.success) {
-    redirect('/dashboard')
+    redirect("/dashboard");
   }
 
   return (
-    <main style={{ padding: 24 }}>
-      <h1 className='bg-blue-200 rounded-lg p-2 m-2'>Login</h1>
+    <div className="nebula-bg min-h-screen flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <div className="mx-auto mb-4 h-14 w-14 rounded-2xl bg-slate-900/40 border border-slate-800 flex items-center justify-center">
+            <Image src="/apel.svg" alt="APEL" width={34} height={34} priority />
+          </div>
 
-      <form action={action} style={{ maxWidth: 300 }}>
-        <div>
-          <input
-          className='bg-gray-200 rounded-lg p-2 m-2'
-            name="email"
-            type="email"
-            placeholder="Email"
-            required
-          />
+          <h1 className="text-4xl font-bold tracking-tight text-white">APEL</h1>
+          <p className="text-slate-400 mt-2">Sign in to your dashboard</p>
         </div>
 
-        <div>
-          <input
-          className='bg-gray-200 rounded-lg p-2 m-2'
-            name="password"
-            type="password"
-            placeholder="Password"
-            required
-          />
-        </div>
+        <div className="card p-8">
+          <form action={action} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">
+                Email
+              </label>
+              <input
+                name="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-transparent transition-all"
+                placeholder="team@dashboard.com"
+              />
+            </div>
 
-        <button className='bg-red-200 rounded-lg p-2' type="submit">Login</button>
-        {state?.error && (
-          <p className='text-red-500'>{state.error}</p>
-        )}
-      </form>
-    </main>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">
+                Password
+              </label>
+              <input
+                name="password"
+                type="password"
+                required
+                className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-transparent transition-all"
+                placeholder="••••••••"
+              />
+            </div>
+
+            <button type="submit" className="w-full btn-highlight py-3 font-medium">
+              Sign In
+            </button>
+
+            {state?.error && (
+              <div className="p-4 rounded-xl bg-red-950/30 border border-red-900/50 text-red-400 text-center">
+                {state.error}
+              </div>
+            )}
+          </form>
+        </div>
+      </div>
+    </div>
   );
 }

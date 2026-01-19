@@ -1,2 +1,35 @@
 @import "tailwindcss";
 
+
+@layer base {
+  body {
+    @apply bg-[#050505] text-white font-sans antialiased;
+  }
+}
+
+@layer components {
+  /* Nebula ambient background with multi-gradient overlay (CSS-safe values) */
+  .nebula-bg {
+    background:
+      radial-gradient(ellipse at top left, rgba(88, 28, 135, 0.20) 0%, transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(30, 58, 138, 0.20) 0%, transparent 50%),
+      radial-gradient(ellipse at top right, rgba(49, 46, 129, 0.10) 0%, transparent 40%),
+      #050505;
+    background-attachment: fixed;
+  }
+
+  /* Glassmorphic card container */
+  .card {
+    @apply bg-slate-900/50 backdrop-blur-md rounded-2xl border border-slate-800;
+  }
+
+  /* Dark Indigo Primary Button */
+  .btn-primary {
+    @apply bg-indigo-950 text-white px-4 py-2 rounded-lg hover:bg-indigo-900 transition-colors;
+  }
+
+  /* Vibrant Orange Highlight Button */
+  .btn-highlight {
+    @apply bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-500 transition-colors;
+  }
+}
