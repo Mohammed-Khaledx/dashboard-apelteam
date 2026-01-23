@@ -71,7 +71,7 @@ export default function RegistrationToggleForm({ initialOpen }: Props) {
                         {isOpen ? "Registration is open" : "Registration is closed"}
                     </p>
                     <p className="text-sm text-slate-400">
-                        Tap to toggle. {isPending ? "Saving…" : "Changes save instantly."}
+                        Tap to Open it. {isPending ? "Saving…" : "Changes save instantly."}
                     </p>
                 </div>
             </div>
