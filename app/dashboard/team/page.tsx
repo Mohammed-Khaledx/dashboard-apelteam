@@ -119,7 +119,7 @@ export default async function MembersPage() {
                 <TableHead className="text-slate-400">Member</TableHead>
                 <TableHead className="text-slate-400">Role</TableHead>
                 <TableHead className="text-slate-400">Group</TableHead>
-                <TableHead className="text-slate-400">Status</TableHead>
+                {/* <TableHead className="text-slate-400">Status</TableHead> */}
                 <TableHead className="text-slate-400 text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -158,7 +158,7 @@ export default async function MembersPage() {
                       {m.group.replace(/_/g, " ")}
                     </Badge>
                   </TableCell>
-                  <TableCell>
+                  {/* <TableCell>
                     <Badge
                       variant="outline"
                       className={
@@ -169,7 +169,7 @@ export default async function MembersPage() {
                     >
                       {m.status}
                     </Badge>
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>
                     <div className="flex items-center justify-end gap-1">
                       <UpdateMemebr id={m._id} />
