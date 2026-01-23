@@ -1,7 +1,19 @@
 @import "tailwindcss";
 
-
 @layer base {
+  :root {
+    --background: 0 0% 2%;
+    --foreground: 0 0% 98%;
+  }
+
+  * {
+    @apply border-slate-800;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
   body {
     @apply bg-[#050505] text-white font-sans antialiased;
   }

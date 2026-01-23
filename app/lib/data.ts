@@ -1,7 +1,8 @@
 import { connectDB } from "./db";
 import { CoreMember } from "./models/CoreMember";
 import { IRegistrationSetting, RegistrationSetting } from "./models/FormSetting";
-import { Member, MemberDTO } from "./types";
+import { Member, MemberDTO, RegisteredTeam } from "./types";
+import Team from "./models/RegisteredTeam";
 
 export async function getAllMembers(): Promise<Member[]> {
   await connectDB();
@@ -41,7 +42,6 @@ export async function updateMemberById(
   await CoreMember.findByIdAndUpdate(id, data);
 }
 
-
 // 
 
 export async function getRegistrationFormState(): Promise<IRegistrationSetting | null> {
@@ -51,3 +51,12 @@ export async function getRegistrationFormState(): Promise<IRegistrationSetting |
 }
 
 
+
+export async function getAllRegisteredTeams(): Promise<RegisteredTeam[]> {
+  await connectDB();
+  const docs = await Team.find().sort({ createdAt: -1 }).lean();
+  return docs.map((doc) => ({
+    ...doc,
+    _id: doc._id.toString(),
+  })) as RegisteredTeam[];
+}

@@ -25,3 +25,27 @@ export interface Member extends MemberDTO {
     createdAt?: Date;
 
 }
+
+
+// Registered Teams
+export interface RegisteredMember {
+  name: string;
+  phone: string;
+  email: string;
+  nationalID: string;
+  studyYear: string;
+  faculty: string;
+  university: string;
+  government: string;
+}
+
+export interface RegisteredTeam {
+  _id: string;
+  teamName: string;
+  members: RegisteredMember[];
+  registeredAt: Date;
+  status: "pending" | "approved" | "rejected";
+  createdAt: Date;
+  updatedAt: Date;
+}
+

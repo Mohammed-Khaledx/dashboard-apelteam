@@ -19,6 +19,7 @@ import {
   updateMemberById,
 } from "./data";
 import { RegistrationSetting } from './models/FormSetting';
+import Team from './models/RegisteredTeam';
 
 // to make track the state of the login action and return a prober
 type LoginResult = { success: true } | { success: false; error: string };
@@ -210,5 +211,15 @@ export async function updateRegistrationSettings(formData: FormData) {
     { upsert: true }
   );
 
+  revalidatePath("/dashboard/compition-form");
+}
+
+export async function updateTeamStatus(
+  teamId: string,
+  status: "pending" | "approved" | "rejected"
+) {
+  await connectDB();
+  await Team.findByIdAndUpdate(teamId, { status });
+  revalidatePath("/dashboard/compition-form/manage-data");
   revalidatePath("/dashboard/compition-form");
 }

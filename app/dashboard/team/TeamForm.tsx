@@ -2,20 +2,33 @@
 
 import { useActionState, useState } from 'react';
 import Link from 'next/link';
-import ThumbnailUpload from './ThumbnailUpload';
 import Image from 'next/image';
+import ThumbnailUpload from './ThumbnailUpload';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 
 const MEMBER_GROUPS = [
-  "general_supervisors",
-  "supervisors",
-  "general_leaders",
-  "leaders",
-  "vices",
-  "graduates"
+  { value: "general_supervisors", label: "General Supervisors" },
+  { value: "supervisors", label: "Supervisors" },
+  { value: "general_leaders", label: "General Leaders" },
+  { value: "leaders", label: "Leaders" },
+  { value: "vices", label: "Vices" },
+  { value: "graduates", label: "Graduates" },
 ] as const;
 
-const GENDERS = ["male", "female"] as const;
-const MEMBER_STATUSES = ["active", "graduated"] as const;
+const GENDERS = [
+  { value: "male", label: "Male" },
+  { value: "female", label: "Female" },
+] as const;
+
+const MEMBER_STATUSES = [
+  { value: "active", label: "Active" },
+  { value: "graduated", label: "Graduated" },
+] as const;
 
 type FormState = { success?: boolean; error?: { message: string } } | null;
 type ActionFunction = (state: FormState, formData: FormData) => Promise<FormState>;
@@ -37,109 +50,119 @@ interface TeamFormProps {
 export default function TeamForm({ action, initialData, mode = 'create' }: TeamFormProps) {
   const [state, formAction, isPending] = useActionState(action, null);
   const [thumbnailUrl, setThumbnailUrl] = useState(initialData?.thumbnail ?? '');
-  const [choice, setChoice] = useState('');
+  const [gender, setGender] = useState(initialData?.gender ?? '');
+  const [group, setGroup] = useState(initialData?.group ?? '');
+  const [status, setStatus] = useState(initialData?.status ?? '');
 
   return (
     <form action={formAction} className="space-y-6">
       {/* Name */}
-      <div>
-        <label className="block text-sm font-medium text-slate-300 mb-2">Name</label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="name">Name</Label>
+        <Input
+          id="name"
           name="name"
           type="text"
           required
           defaultValue={initialData?.name}
-          className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-transparent transition-all"
           placeholder="Enter member name"
+          className="bg-slate-900/50 border-slate-700 focus:border-orange-500/50"
         />
       </div>
 
       {/* Role */}
-      <div>
-        <label className="block text-sm font-medium text-slate-300 mb-2">Role</label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="role">Role</Label>
+        <Input
+          id="role"
           name="role"
           type="text"
           required
           defaultValue={initialData?.role}
-          className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-transparent transition-all"
           placeholder="Enter role"
+          className="bg-slate-900/50 border-slate-700 focus:border-orange-500/50"
         />
       </div>
 
       {/* Two column grid for selects */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Group */}
-        <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Group</label>
-          <select
-            name="group"
-            required
-            className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-transparent transition-all"
-            defaultValue={initialData?.group || ""}
-          >
-            <option value="" disabled className="bg-slate-900">Select group</option>
-            {MEMBER_GROUPS.map((g) => (
-              <option key={g} value={g} className="bg-slate-900">{g.replace(/_/g, ' ')}</option>
-            ))}
-          </select>
+        <div className="space-y-2">
+          <Label>Group</Label>
+          <input type="hidden" name="group" value={group} />
+          <Select value={group} onValueChange={setGroup} required>
+            <SelectTrigger className="bg-slate-900/50 border-slate-700">
+              <SelectValue placeholder="Select group" />
+            </SelectTrigger>
+            <SelectContent className="bg-slate-900 border-slate-700">
+              {MEMBER_GROUPS.map((g) => (
+                <SelectItem key={g.value} value={g.value}>
+                  {g.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Gender */}
-        <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Gender</label>
-          <select
-            name="gender"
-            required
-            className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-transparent transition-all"
-            onChange={(e) => setChoice(e.target.value)}
-            defaultValue={initialData?.gender || ""}
-          >
-            <option value="" disabled className="bg-slate-900">Select gender</option>
-            {GENDERS.map((g) => (
-              <option key={g} value={g} className="bg-slate-900">{g}</option>
-            ))}
-          </select>
+        <div className="space-y-2">
+          <Label>Gender</Label>
+          <input type="hidden" name="gender" value={gender} />
+          <Select value={gender} onValueChange={setGender} required>
+            <SelectTrigger className="bg-slate-900/50 border-slate-700">
+              <SelectValue placeholder="Select gender" />
+            </SelectTrigger>
+            <SelectContent className="bg-slate-900 border-slate-700">
+              {GENDERS.map((g) => (
+                <SelectItem key={g.value} value={g.value}>
+                  {g.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Status */}
-        <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Status</label>
-          <select
-            name="status"
-            required
-            className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-transparent transition-all"
-            defaultValue={initialData?.status || ""}
-          >
-            <option value="" disabled className="bg-slate-900">Select status</option>
-            {MEMBER_STATUSES.map((s) => (
-              <option key={s} value={s} className="bg-slate-900">{s}</option>
-            ))}
-          </select>
+        <div className="space-y-2">
+          <Label>Status</Label>
+          <input type="hidden" name="status" value={status} />
+          <Select value={status} onValueChange={setStatus} required>
+            <SelectTrigger className="bg-slate-900/50 border-slate-700">
+              <SelectValue placeholder="Select status" />
+            </SelectTrigger>
+            <SelectContent className="bg-slate-900 border-slate-700">
+              {MEMBER_STATUSES.map((s) => (
+                <SelectItem key={s.value} value={s.value}>
+                  {s.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Order */}
-        <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Order</label>
-          <input
+        <div className="space-y-2">
+          <Label htmlFor="order">Order</Label>
+          <Input
+            id="order"
             name="order"
             type="number"
             defaultValue={initialData?.order ?? 0}
-            className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-transparent transition-all"
+            className="bg-slate-900/50 border-slate-700 focus:border-orange-500/50"
           />
         </div>
       </div>
 
       {/* Thumbnail */}
-      <div>
-        <label className="block text-sm font-medium text-slate-300 mb-2">Thumbnail</label>
+      <div className="space-y-2">
+        <Label>Thumbnail</Label>
         <input name="thumbnail" type="hidden" value={thumbnailUrl} />
-        <div className="card p-4">
-          {initialData?.gender === "female" || choice === "female" ? (
+        <div className="p-4 rounded-xl border border-slate-700 bg-slate-900/30">
+          {gender === "female" ? (
             <div className="flex items-center gap-4">
               <Image
                 src="https://cavrac2fayzzho5v.public.blob.vercel-storage.com/team/1768686255699-apel-women-N4TrfINpuymlgX4zqWH2hZz8QHSlSz.jpg"
-                alt="Thumbnail preview"
+                alt="Default female avatar"
                 width={64}
                 height={64}
                 className="h-16 w-16 rounded-xl object-cover border border-slate-700"
@@ -154,35 +177,40 @@ export default function TeamForm({ action, initialData, mode = 'create' }: TeamF
 
       {/* Actions */}
       <div className="flex items-center gap-4 pt-4">
-        <button
+        <Button
           type="submit"
           disabled={isPending}
-          className="btn-highlight disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600"
         >
+          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {isPending 
             ? (mode === 'create' ? "Adding..." : "Saving...") 
             : (mode === 'create' ? "Add Member" : "Save Changes")
           }
-        </button>
+        </Button>
 
-        <Link 
-          href="/dashboard/team" 
-          className="px-4 py-2 text-slate-400 hover:text-white transition-colors"
-        >
-          Cancel
+        <Link href="/dashboard/team">
+          <Button variant="ghost" className="text-slate-400 hover:text-white">
+            Cancel
+          </Button>
         </Link>
       </div>
 
       {/* Feedback */}
       {state?.error && (
-        <div className="p-4 rounded-xl bg-red-950/30 border border-red-900/50 text-red-400">
-          {state.error.message}
-        </div>
+        <Alert variant="destructive" className="bg-red-950/30 border-red-900/50">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{state.error.message}</AlertDescription>
+        </Alert>
       )}
+      
       {state?.success && !isPending && (
-        <div className="p-4 rounded-xl bg-emerald-950/30 border border-emerald-900/50 text-emerald-400">
-          {mode === 'create' ? "Member added successfully!" : "Member updated successfully!"}
-        </div>
+        <Alert className="bg-emerald-950/30 border-emerald-900/50 text-emerald-400">
+          <CheckCircle2 className="h-4 w-4" />
+          <AlertDescription>
+            {mode === 'create' ? "Member added successfully!" : "Member updated successfully!"}
+          </AlertDescription>
+        </Alert>
       )}
     </form>
   );
