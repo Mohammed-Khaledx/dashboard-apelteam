@@ -54,6 +54,14 @@ export default async function DashboardLayout({
                 <span>Team</span>
               </Link>
             </li>
+            <li>
+              <Link
+                href="/dashboard/compition-form"
+                className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all"
+              >
+                <span>Form Control</span>
+              </Link>
+            </li>
           </ul>
         </nav>
 

@@ -1,5 +1,6 @@
 import { connectDB } from "./db";
 import { CoreMember } from "./models/CoreMember";
+import { IRegistrationSetting, RegistrationSetting } from "./models/FormSetting";
 import { Member, MemberDTO } from "./types";
 
 export async function getAllMembers(): Promise<Member[]> {
@@ -39,3 +40,14 @@ export async function updateMemberById(
   await connectDB();
   await CoreMember.findByIdAndUpdate(id, data);
 }
+
+
+// 
+
+export async function getRegistrationFormState(): Promise<IRegistrationSetting | null> {
+  await connectDB();
+  const doc = await RegistrationSetting.findOne().lean();
+  return doc as IRegistrationSetting | null;
+}
+
+

@@ -18,6 +18,7 @@ import {
   createMember,
   updateMemberById,
 } from "./data";
+import { RegistrationSetting } from './models/FormSetting';
 
 // to make track the state of the login action and return a prober
 type LoginResult = { success: true } | { success: false; error: string };
@@ -157,7 +158,6 @@ export async function actionUpdateMember(
   revalidatePath("/dashboard/team");
   redirect("/dashboard/team");
 }
-
 // Vercel Blob usage
 export async function actionUploadThumbnail(
   _prevState: UploadState,
@@ -196,4 +196,19 @@ export async function actionUploadThumbnail(
       },
     };
   }
+}
+
+export async function updateRegistrationSettings(formData: FormData) {
+  await connectDB();
+  const isOpen = formData.get('isOpen') === 'true';
+  // const deadlineStr = formData.get('deadline');
+  // const deadline = deadlineStr ? new Date(String(deadlineStr)) : undefined;
+
+  await RegistrationSetting.findOneAndUpdate(
+    {},
+    { isOpen, updatedAt: new Date() },
+    { upsert: true }
+  );
+
+  revalidatePath("/dashboard/compition-form");
 }
