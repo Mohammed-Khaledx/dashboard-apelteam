@@ -94,6 +94,7 @@ type UploadState = { url?: string; error?: { message: string } } | null;
 
 export async function actionDeleteMember(id: string) {
   await deleteMemberById(id);
+  revalidatePath("/dashboard/team");
 }
 
 export async function actionCreateMember(
